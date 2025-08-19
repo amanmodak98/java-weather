@@ -10,7 +10,9 @@ async function fetchWeather(city){
 function setStatus(msg, tone='info'){
   const el=document.getElementById('status');
   el.textContent=msg||'';
-  el.style.color = tone==='error' ? '#fecaca' : '#93c5fd';
+  el.classList.remove('error','loading');
+  if(tone==='error'){ el.classList.add('error'); }
+  if(msg && tone!=='error'){ el.classList.add('loading'); }
 }
 
 function iconFromDescription(desc=''){
@@ -39,9 +41,10 @@ function showForecast(list){
   const root=document.getElementById('forecast');
   const grid=document.getElementById('forecast-list');
   grid.innerHTML='';
-  (list||[]).slice(0,5).forEach(d=>{
+  (list||[]).slice(0,5).forEach((d,idx)=>{
     const div=document.createElement('div');
-    div.className='day';
+    div.className='day reveal';
+    div.style.setProperty('--i', idx);
     const icon = iconFromDescription(d.description||'');
     div.innerHTML=`
       <div class="mini"><svg><use href="${icon}"></use></svg></div>
