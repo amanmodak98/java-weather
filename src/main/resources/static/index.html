@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- SVG sprite for icons -->
+  <svg width="0" height="0" style="position:absolute;visibility:hidden" aria-hidden="true">
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    </symbol>
+    <symbol id="icon-thermo" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M17 11a5 5 0 1 1-8 4V5a3 3 0 0 1 6 0v10a3 3 0 1 1-4 0V5a1 1 0 0 1 2 0v10a1 1 0 1 0 2 0V5a3 3 0 0 0-6 0v10a5 5 0 1 0 8-4z"/>
+    </symbol>
+    <symbol id="icon-droplet" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2s6 7.16 6 11a6 6 0 0 1-12 0c0-3.84 6-11 6-11z"/>
+    </symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.79 1.8-1.79zM1 13h3v-2H1v2zm10 10h2v-3h-2v3zm8.03-3.97l1.79-1.79-1.41-1.41-1.79 1.79 1.41 1.41zM20 11v2h3v-2h-3zM6.76 19.16l-1.8 1.79 1.41 1.41 1.79-1.79-1.4-1.41zM11 1v3h2V1h-2zm7.07 3.93l1.79-1.79-1.41-1.41-1.79 1.79 1.41 1.41zM12 7a5 5 0 1 0 .001 10.001A5 5 0 0 0 12 7z"/>
+    </symbol>
+    <symbol id="icon-cloud" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 18H6a4 4 0 1 1 1-7.874 5.5 5.5 0 0 1 10.9 1.349A3.5 3.5 0 1 1 19 18z"/>
+    </symbol>
+    <symbol id="icon-rain" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M7 20l1-2m3 2l1-2m3 2l1-2M6 16a4 4 0 1 1 1-7.874 5.5 5.5 0 0 1 10.9 1.35A3.5 3.5 0 1 1 19 16H6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="icon-snow" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2v20M4.5 6l15 12M4.5 18l15-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <div class="bg-wrap">
+    <div class="bg-gradient"></div>
+    <div class="bg-noise"></div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <h1>Weather <span class="accent">Now</span></h1>
+      <p class="subtitle">Check current conditions and a 5‑day outlook</p>
+      <form id="search-form" class="search">
+        <span class="icon"><svg><use href="#icon-search"></use></svg></span>
+        <input id="city" type="text" placeholder="Enter city (e.g., London)" required />
+        <button type="submit" id="go">Search</button>
+      </form>
+      <div id="status" aria-live="polite" class="status"></div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section id="current" class="card hero" hidden>
+      <div class="hero-left">
+        <div class="temp">
+          <svg class="temp-icon"><use href="#icon-thermo"></use></svg>
+          <span id="temp">--</span><span class="unit">°C</span>
+        </div>
+        <div class="location" id="location">&nbsp;</div>
+      </div>
+      <div class="hero-right">
+        <div class="metric">
+          <svg class="icon"><use href="#icon-droplet"></use></svg>
+          <div>
+            <div class="metric-value"><span id="humidity">--</span><span class="unit">%</span></div>
+            <div class="metric-label">Humidity</div>
+          </div>
+        </div>
+        <div class="metric">
+          <svg class="icon cond-icon"><use id="cond-icon" href="#icon-cloud"></use></svg>
+          <div>
+            <div class="metric-value" id="cond-text">&nbsp;</div>
+            <div class="metric-label">Condition</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="forecast" class="card" hidden>
+      <h2>5‑Day Forecast</h2>
+      <div id="forecast-list" class="forecast-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>Powered by OpenWeatherMap</small>
+    </div>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

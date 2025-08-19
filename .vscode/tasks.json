@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "mvn - build test",
+			"type": "shell",
+			"command": "./mvnw -q -e -DskipTests=false test",
+			"problemMatcher": [
+				"$maven"
+			],
+			"group": "build"
+		}
+	]
+}
